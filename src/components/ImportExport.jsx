@@ -20,7 +20,10 @@ export default function ImportExport({ contacts, onImport, onReplace }) {
     const a = document.createElement('a')
     a.href = url
     a.download = `kontakty_${new Date().toISOString().slice(0, 10)}.json`
+    a.style.display = 'none'
+    document.body.appendChild(a)
     a.click()
+    document.body.removeChild(a)
     URL.revokeObjectURL(url)
     setImportStatus({ type: 'success', message: `Exportováno ${contacts.length} kontaktů (JSON).` })
   }, [contacts])
@@ -31,9 +34,9 @@ export default function ImportExport({ contacts, onImport, onReplace }) {
       setImportStatus({ type: 'error', message: 'Žádné kontakty k exportu.' })
       return
     }
-    const header = 'Jméno,Funkce,Firma,Email,Telefon'
+    const header = 'Jméno,Funkce,Firma,Email,Telefon,Poznámka'
     const rows = contacts.map(c =>
-      [c.name, c.position, c.company, c.email, c.phone]
+      [c.name, c.position, c.company, c.email, c.phone, c.notes || '']
         .map(val => `"${(val || '').replace(/"/g, '""')}"`)
         .join(',')
     )
@@ -43,7 +46,10 @@ export default function ImportExport({ contacts, onImport, onReplace }) {
     const a = document.createElement('a')
     a.href = url
     a.download = `kontakty_${new Date().toISOString().slice(0, 10)}.csv`
+    a.style.display = 'none'
+    document.body.appendChild(a)
     a.click()
+    document.body.removeChild(a)
     URL.revokeObjectURL(url)
     setImportStatus({ type: 'success', message: `Exportováno ${contacts.length} kontaktů (CSV).` })
   }, [contacts])
@@ -74,6 +80,7 @@ export default function ImportExport({ contacts, onImport, onReplace }) {
             company: item.company || item['Firma'] || '',
             email: item.email || item['Email'] || '',
             phone: item.phone || item['Telefon'] || '',
+            notes: item.notes || item['Poznámka'] || '',
           })).filter(c => c.name.trim() !== '')
 
         } else if (file.name.endsWith('.csv')) {
@@ -94,6 +101,7 @@ export default function ImportExport({ contacts, onImport, onReplace }) {
                 company: cols[2].trim(),
                 email: cols[3].trim(),
                 phone: cols[4].trim(),
+                notes: cols[5] !== undefined ? cols[5].trim() : '',
               })
             }
           }
@@ -153,7 +161,7 @@ export default function ImportExport({ contacts, onImport, onReplace }) {
       </h2>
       <p style={{ fontSize: '0.875rem', color: 'var(--kh-text-secondary)', marginBottom: '0.75rem' }}>
         Nahrajte soubor ve formátu JSON nebo CSV.
-        CSV musí obsahovat hlavičku: Jméno, Funkce, Firma, Email, Telefon.
+        CSV musí obsahovat hlavičku: Jméno, Funkce, Firma, Email, Telefon, Poznámka.
       </p>
 
       {/* Režim importu */}

@@ -9,6 +9,7 @@ const initialFormState = {
   email: '',
   phone: '',
   company: '',
+  notes: '',
 }
 
 export default function AddContactForm({ onAddContact }) {
@@ -32,6 +33,7 @@ export default function AddContactForm({ onAddContact }) {
     }
     if (!form.phone.trim()) newErrors.phone = 'Telefon je povinný'
     if (!form.company.trim()) newErrors.company = 'Firma je povinná'
+    if (form.notes.length > 500) newErrors.notes = 'Poznámka může mít maximálně 500 znaků'
     return newErrors
   }, [form])
 
@@ -50,6 +52,7 @@ export default function AddContactForm({ onAddContact }) {
       email: form.email.trim(),
       phone: form.phone.trim(),
       company: form.company.trim(),
+      notes: form.notes.trim(),
     }
     onAddContact(newContact)
     setForm(initialFormState)
@@ -117,6 +120,19 @@ export default function AddContactForm({ onAddContact }) {
               id="input-phone" name="phone" value={form.phone} onChange={handleChange}
               autoComplete="tel" required />
             {errors.phone && <div className="invalid-feedback" role="alert">{errors.phone}</div>}
+          </div>
+
+          <div>
+            <label htmlFor="input-notes" className="form-label">
+              Poznámka (max 500 znaků)
+            </label>
+            <textarea className={`form-control ${errors.notes ? 'is-invalid' : ''}`}
+              id="input-notes" name="notes" value={form.notes} onChange={handleChange}
+              rows="3" maxLength="500" />
+            {errors.notes && <div className="invalid-feedback" role="alert">{errors.notes}</div>}
+            <div className="form-text text-end" style={{ fontSize: '0.8rem', color: 'var(--kh-text-muted)' }}>
+              {form.notes.length}/500
+            </div>
           </div>
 
           <div className="d-flex gap-2 mt-1">

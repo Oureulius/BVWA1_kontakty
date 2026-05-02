@@ -16,6 +16,11 @@ export default function ContactCard({ contact, onDelete, viewMode }) {
 
         <a href={`mailto:${contact.email}`} className="kh-contact-detail">{contact.email}</a>
         <a href={`tel:${contact.phone.replace(/\s/g, '')}`} className="kh-contact-detail">{contact.phone}</a>
+        {contact.notes && (
+          <p style={{ margin: '0.4rem 0 0', fontSize: '0.82rem', color: 'var(--kh-text-muted)', fontStyle: 'italic', wordBreak: 'break-word' }}>
+            {contact.notes}
+          </p>
+        )}
 
         <div className="d-flex gap-2">
           <button
@@ -54,6 +59,11 @@ export default function ContactCard({ contact, onDelete, viewMode }) {
       <div className="d-flex flex-column gap-1">
         <a href={`mailto:${contact.email}`} className="kh-contact-detail">{contact.email}</a>
         <a href={`tel:${contact.phone.replace(/\s/g, '')}`} className="kh-contact-detail">{contact.phone}</a>
+        {contact.notes && (
+          <p style={{ margin: '0.4rem 0 0', fontSize: '0.82rem', color: 'var(--kh-text-muted)', fontStyle: 'italic', wordBreak: 'break-word' }}>
+            {contact.notes}
+          </p>
+        )}
       </div>
     </article>
   )
